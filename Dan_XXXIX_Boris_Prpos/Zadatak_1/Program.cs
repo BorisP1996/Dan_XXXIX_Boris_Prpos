@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Zadatak_1
@@ -30,7 +31,9 @@ namespace Zadatak_1
                         song.ReadFromFile();
                         break;
                     case "3":
-                      
+                        Thread SongStarter = new Thread(() => song.StartSong());
+                        SongStarter.Start();
+                        SongStarter.Join();
                         break;
                     case "4":
                         spin = false;

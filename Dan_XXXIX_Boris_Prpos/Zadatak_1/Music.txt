@@ -1,3 +1,5 @@
-0 baja:magija 01:01:01
-1 baja:ladja 00:05:01
-2 baja:pjesma 00:03:57
+0 Baja Mali Knindza:Potonula ladja 00:03:14
+1 NN:Kratka Pjesma 00:00:17
+2 izvodjac:ime ime ime ime 00:00:12
+3 izvodjac:ime pjesme ime 00:01:05
+4 Izvodjac1:Pjesma1 00:00:19

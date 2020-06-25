@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Zadatak_1
 {
+    
     class Song
     {
+        static CountdownEvent countdown = new CountdownEvent(1);
         int ID;
         string Author { get; set; }
         string Name { get; set; }
@@ -243,22 +245,42 @@ namespace Zadatak_1
 
         public void StartSong()
         {
+            Thread ComercialStarter = new Thread(() => PopComercial());
             int durationSec = PickSong();
             int durationMs = durationSec * 1000;
             int counter = 0;
+            int distinctUse = durationMs;
+            ComercialStarter.Start();
             while (durationMs!=0)
-            {
+            {              
                 Thread.Sleep(1000);
                 Console.WriteLine("Song is playing...{0}",counter++);
-                durationMs -= 1000;
-            }
+                durationMs -= 1000;     
+            
+            }      
+            countdown.Signal();
+            Thread.Sleep(2000);
             Console.WriteLine("\nSong has finished.");
         }
-
-
-
-
-
+        public void PopComercial()
+        {
+            string pathComercial = @"../../Comercial.txt";
+            StreamReader sr = new StreamReader(pathComercial);
+            string line = "";
+            List<string> comercials = new List<string>();
+            while ((line=sr.ReadLine())!=null)
+            {
+                comercials.Add(line);
+            }
+            Random rnd = new Random();
+            //countdown.Wait();
+            while (!countdown.IsSet)
+            {
+                Thread.Sleep(2000);
+                int random = rnd.Next(0, 5);
+                Console.WriteLine("\t"+comercials[random]);
+            }          
+        }
     }
 
 }

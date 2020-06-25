@@ -1,3 +1,3 @@
-[Baja Mali Knindza]:[Magija] [00:03:13]
-[Baja Mali Knindza]:[Potonula ladja] [00:02:59]
-[Baja Mali Knindza]:[Stari bagrem] [00:03:45]
+0 baja:magija 01:01:01
+1 baja:ladja 00:05:01
+2 baja:pjesma 00:03:57

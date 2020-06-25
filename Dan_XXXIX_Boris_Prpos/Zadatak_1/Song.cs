@@ -9,6 +9,7 @@ namespace Zadatak_1
 {
     class Song
     {
+        int ID;
         string Author { get; set; }
         string Name { get; set; }
         string Duration { get; set; }
@@ -18,11 +19,12 @@ namespace Zadatak_1
         {
 
         }
-        public Song(string a, string n, string d)
+        public Song(int i,string a, string n, string d)
         {
             Author = a;
             Name = n;
             Duration = d;
+            ID = i;
         }
         public void AddSong()
         {
@@ -61,7 +63,8 @@ namespace Zadatak_1
                     Console.WriteLine("Please enter song duration in correct format. Try again:");
                     inputDuration = Console.ReadLine();
                 }
-                Song s = new Song(inputAuthor, inputName, inputDuration);
+                int id = CalculateID();
+                Song s = new Song(id,inputAuthor, inputName, inputDuration);
                 Console.WriteLine("Song is created!");
                 Console.WriteLine(s.SongDisplay(s));
 
@@ -90,6 +93,10 @@ namespace Zadatak_1
                 {
                     Console.WriteLine(item);
                 }
+                foreach (string item in songList)
+                {
+                    Console.WriteLine(CalculateDuration(item));
+                }
             }
         }
         public void WriteToFile(Song s)
@@ -102,22 +109,66 @@ namespace Zadatak_1
         }
         public string SongDisplay(Song s)
         {
-             string write = "["+s.Author+"]:["+s.Name+"] ["+s.Duration+"]" ;
+            string write = s.ID+" "+s.Author+":"+s.Name+" "+s.Duration+"" ;
             return write;
         }
         public bool DurationValidation(string duration)
         {
             char[] array = duration.ToCharArray();
 
-            if (array.Count() ==8 && Char.IsDigit(array[0]) && Char.IsDigit(array[1]) && array[2]==':' && Char.IsDigit(array[3]) && Char.IsDigit(array[4]) && array[5]==':' && Char.IsDigit(array[6]) && Char.IsDigit(array[7]) )
+            if (array.Count() ==8 && Char.IsDigit(array[0]) && Char.IsDigit(array[1]) && array[2]==':' && Char.IsDigit(array[3]) && Char.IsDigit(array[4]) && array[5]==':' && Char.IsDigit(array[6]) && Char.IsDigit(array[7]) && Convert.ToInt32(array[0].ToString())<6 && Convert.ToInt32(array[3].ToString()) < 6 && Convert.ToInt32(array[6].ToString()) < 6)
             {
                 return true;
             }
+           
             else
             {
                 return false;
             }
         }
+        public int CalculateID()
+        {
+            int lastID = 0;
+            StreamReader sr = new StreamReader(path);
+            List<string> songListforID = new List<string>();
+            string line = "";
+            while ((line = sr.ReadLine()) != null)
+            {
+                songListforID.Add(line);
+            }
+            sr.Close();
+
+            if (songListforID.Count==0)
+            {
+                return lastID;
+            }
+            else
+            {
+                string lastRecord = songListforID[songListforID.Count - 1];
+                string[] lastRecArray = lastRecord.Split(' ').ToArray();
+                lastID = Convert.ToInt32(lastRecArray[0]);
+            }       
+            return lastID + 1;
+        }
+        public int CalculateDuration(string song)
+        {
+            int h = 0;
+            int m = 0;
+            int s = 0;
+            int totalSeconds;
+            List<string> stringList = song.Split(' ').ToList();
+
+            string duration = stringList[stringList.Count - 1];
+
+            string[] times = duration.Split(':').ToArray();
+            h = Convert.ToInt32(times[0]);
+            m = Convert.ToInt32(times[1]);
+            s = Convert.ToInt32(times[2]);
+
+            totalSeconds = s + (m * 60) + (h * 3600);
+            return totalSeconds;
+        }
+      
         
 
     }

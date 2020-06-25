@@ -30,7 +30,7 @@ namespace Zadatak_1
                         song.ReadFromFile();
                         break;
                     case "3":
-                        Console.WriteLine("player started");
+                      
                         break;
                     case "4":
                         spin = false;

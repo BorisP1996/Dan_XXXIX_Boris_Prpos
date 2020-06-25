@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace Zadatak_1
 {
-    
+
     class Song
     {
+        static int durationMs = 0;
         static CountdownEvent countdown = new CountdownEvent(1);
+        static CountdownEvent countdown2 = new CountdownEvent(1);
         int ID;
         string Author { get; set; }
         string Name { get; set; }
@@ -226,7 +228,7 @@ namespace Zadatak_1
                         targetSong = songList[i];
                     }
                 }
-                Console.WriteLine("Name of the selected song is:{0}\nTime of reproduction:{1}",ExtractTitle(targetSong), DateTime.Now.ToString("h:mm:ss tt"));
+                Console.WriteLine("Name of the selected song is:{0}\nTime of reproduction:{1}\n\nPress enter at any time to stop.\n", ExtractTitle(targetSong), DateTime.Now.ToString("h:mm:ss tt"));
                 break;
             }
             return duration;
@@ -236,31 +238,11 @@ namespace Zadatak_1
         {
             string[] array = song.Split(':').ToArray();
             string afterDot = array[1];
-            string [] afterDotArray = afterDot.Split(' ').ToArray();
+            string[] afterDotArray = afterDot.Split(' ').ToArray();
             string[] title = afterDotArray.Take(afterDotArray.Length - 1).ToArray();
             string titleRet = String.Concat(title);
 
             return titleRet;
-        }
-
-        public void StartSong()
-        {
-            Thread ComercialStarter = new Thread(() => PopComercial());
-            int durationSec = PickSong();
-            int durationMs = durationSec * 1000;
-            int counter = 0;
-            int distinctUse = durationMs;
-            ComercialStarter.Start();
-            while (durationMs!=0)
-            {              
-                Thread.Sleep(1000);
-                Console.WriteLine("Song is playing...{0}",counter++);
-                durationMs -= 1000;     
-            
-            }      
-            countdown.Signal();
-            Thread.Sleep(2000);
-            Console.WriteLine("\nSong has finished.");
         }
         public void PopComercial()
         {
@@ -268,7 +250,7 @@ namespace Zadatak_1
             StreamReader sr = new StreamReader(pathComercial);
             string line = "";
             List<string> comercials = new List<string>();
-            while ((line=sr.ReadLine())!=null)
+            while ((line = sr.ReadLine()) != null)
             {
                 comercials.Add(line);
             }
@@ -278,8 +260,67 @@ namespace Zadatak_1
             {
                 Thread.Sleep(2000);
                 int random = rnd.Next(0, 5);
-                Console.WriteLine("\t"+comercials[random]);
-            }          
+                Console.WriteLine("\t" + comercials[random]);
+            }
+        }
+        public void StartSong()
+        {
+            Thread EventExitThread = new Thread(() => EventExit());
+            Thread ComercialStarter = new Thread(() => PopComercial());
+            int durationSec = PickSong();
+            durationMs = durationSec * 1000;
+            int counter = 0;
+            int distinctUse = durationMs;
+            ComercialStarter.Start();
+            EventExitThread.Start();
+            //EventExitThread.Join();
+            while (durationMs != 0 && !countdown2.IsSet)
+            {
+
+                Thread.Sleep(1000);
+                Console.WriteLine("Song is playing...");
+                durationMs -= 1000;
+            }
+
+
+          
+                countdown.Signal();
+            
+            Thread.Sleep(2000);
+            Console.WriteLine("\nSong has finished.\n");
+            countdown.Reset();
+        }
+
+        public void EventExit()
+        {
+            ConsoleKeyInfo cki;
+
+            Delegate d = new Delegate();
+
+            //cki = Console.ReadKey(true);
+            if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+            {
+                countdown2.Signal();
+
+                //Console.WriteLine("You pressed the '{0}' key.\n");
+                d.Exit();
+            }
+        }
+    }
+    class Delegate
+    {
+        public delegate void Notification();
+
+        public event Notification OnNotification;
+
+        public void Exit()
+        {
+            OnNotification += () =>
+            {
+                Thread.Sleep(2001);
+                Console.WriteLine("Song is stopped.");
+            };
+            OnNotification.Invoke();
         }
     }
 

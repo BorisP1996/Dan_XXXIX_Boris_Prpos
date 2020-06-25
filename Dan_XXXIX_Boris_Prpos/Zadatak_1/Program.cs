@@ -9,9 +9,13 @@ namespace Zadatak_1
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            Song song = new Song();
+
+        Song song = new Song();
+
+
             bool spin = true;
             while (spin)
             {
@@ -32,8 +36,11 @@ namespace Zadatak_1
                         break;
                     case "3":
                         Thread SongStarter = new Thread(() => song.StartSong());
+
+                       
                         SongStarter.Start();
                         SongStarter.Join();
+
                         break;
                     case "4":
                         spin = false;
@@ -44,6 +51,8 @@ namespace Zadatak_1
                         break;
                 }
             }
+
         }
+      
     }
 }

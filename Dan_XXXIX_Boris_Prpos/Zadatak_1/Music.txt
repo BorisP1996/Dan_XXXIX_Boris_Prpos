@@ -4,3 +4,4 @@
 3 izvodjac:ime pjesme ime 00:01:05
 4 Izvodjac1:Pjesma1 00:00:19
 5 Izvodjac:Pjesma 00:02:12
+6 Baja Mali Knindza:MAgija 00:00:09

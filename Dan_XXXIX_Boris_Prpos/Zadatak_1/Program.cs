@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Zadatak_1
 {
@@ -12,9 +8,7 @@ namespace Zadatak_1
 
         static void Main(string[] args)
         {
-
-        Song song = new Song();
-
+            Song song = new Song();
 
             bool spin = true;
             while (spin)
@@ -36,16 +30,12 @@ namespace Zadatak_1
                         break;
                     case "3":
                         Thread SongStarter = new Thread(() => song.StartSong());
-
-                       
                         SongStarter.Start();
                         SongStarter.Join();
-
                         break;
                     case "4":
                         spin = false;
                         break;
-
                     default:
                         Console.WriteLine("Invalid input. Please select one option from the list.");
                         break;
@@ -53,6 +43,6 @@ namespace Zadatak_1
             }
 
         }
-      
+
     }
 }
